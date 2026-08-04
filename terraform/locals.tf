@@ -22,4 +22,18 @@ locals {
     "10.0.0.0/26"
   ]
 
+  appgw_sku_name = "Standard_v2"
+  appgw_sku_tier = "Standard_v2"
+  appgw_capacity = 2
+
+  appgw_frontend_port = 80
+
+  backend_port = 80
+
+  probe_path = "/"
+
+  probe_interval            = 30
+  probe_timeout             = 30
+  probe_unhealthy_threshold = 3
+
 }

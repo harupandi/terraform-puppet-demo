@@ -9,7 +9,7 @@ resource "azurerm_virtual_network" "main" {
   tags = local.tags
 }
 
-resource "azurerm_subnet" "appggw" {
+resource "azurerm_subnet" "appgw" {
   name                 = local.appgw_subnet_name
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
