@@ -103,28 +103,6 @@ Planned:
 
 ---
 
-# Terraform Structure
-terraform/
-
-├── provider.tf
-├── versions.tf
-├── variables.tf
-├── terraform.tfvars.example
-│
-├── locals.tf
-├── locals.naming.tf
-│
-├── main.tf
-├── network.tf
-├── nsg.tf
-├── compute.tf
-├── bastion.tf
-├── appgateway.tf
-│
-├── outputs.tf
-└── .terraform.lock.hcl
-
----
 
 # Terraform Design Decisions
 
