@@ -1,0 +1,193 @@
+#############################################
+# Terraform
+#############################################
+
+# Terraform working directory
+.terraform/
+
+# Terraform state files (NEVER COMMIT)
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform plan files
+*.tfplan
+*.plan
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Terraform override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform variable files (may contain secrets)
+*.tfvars
+*.tfvars.json
+
+# Keep provider dependency lock file
+# DO NOT ignore:
+# .terraform.lock.hcl
+
+
+#############################################
+# Terraform sensitive files
+#############################################
+
+# Local Terraform configuration
+terraform.rc
+.terraformrc
+
+# Terraform generated files
+*.tfstate.d/
+
+
+#############################################
+# Azure CLI
+#############################################
+
+# Azure CLI configuration/cache
+.azure/
+
+# Azure credentials/config files
+azureProfile.json
+
+
+#############################################
+# SSH KEYS
+#############################################
+
+# Private keys
+*.pem
+*.key
+*.ppk
+
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+
+# SSH folders
+.ssh/
+
+
+#############################################
+# Secrets / Environment Variables
+#############################################
+
+.env
+.env.*
+*.env
+
+# Generic secrets
+secrets/
+secret/
+*.secret
+*.password
+*.credentials
+
+
+#############################################
+# Puppet
+#############################################
+
+# Puppet generated files
+.puppet/
+.bundle/
+vendor/
+
+# Puppet logs
+*.log
+
+# Puppet cache
+.cache/
+
+# Puppet reports
+reports/
+
+
+#############################################
+# Ansible (future-proofing)
+#############################################
+
+*.retry
+
+
+#############################################
+# Docker
+#############################################
+
+# Docker overrides
+docker-compose.override.yml
+
+# Docker environment files
+docker.env
+
+
+#############################################
+# Operating System Files
+#############################################
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+#############################################
+# Editors / IDEs
+#############################################
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains IDEs
+.idea/
+
+# Vim
+*.swp
+*.swo
+
+
+#############################################
+# Temporary files
+#############################################
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*~
+
+# Logs
+logs/
+*.log
+
+
+#############################################
+# Build artifacts
+#############################################
+
+dist/
+build/
+out/
+tmp/
+
+
+#############################################
+# Documentation / local notes
+#############################################
+
+# Personal notes
+notes/
+drafts/
