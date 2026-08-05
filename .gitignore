@@ -157,6 +157,17 @@ $RECYCLE.BIN/
 *.swp
 *.swo
 
+#############################################
+# Puppet control-repo (r10k managed)
+#############################################
+
+# Modules pulled by r10k from the Puppetfile — these get
+# re-downloaded on every deploy, never commit them.
+# Only puppet/site/ (your own role/profile code) should be tracked.
+puppet/modules/
+
+# rspec-puppet / PDK test fixtures, if you add tests later
+puppet/spec/fixtures/
 
 #############################################
 # Temporary files

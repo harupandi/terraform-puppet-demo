@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euxo pipefail
+
+CODENAME=$(lsb_release -cs)
+curl -fsSL -O "https://apt.puppet.com/puppet8-release-$${CODENAME}.deb"
+dpkg -i "puppet8-release-$${CODENAME}.deb"
+apt-get update
+
+%{ if vm.role == "puppet" ~}
+apt-get install -y puppetserver
+sed -i 's/JAVA_ARGS="-Xms2g -Xmx2g/JAVA_ARGS="-Xms512m -Xmx512m/' /etc/default/puppetserver
+
+cat >> /etc/puppetlabs/puppet/puppet.conf <<'EOF'
+[main]
+certname = ${puppet.fqdn}
+dns_alt_names = ${puppet.fqdn},puppet,${vm.vm_name}
+EOF
+
+systemctl enable puppetserver
+systemctl start puppetserver
+
+%{ else ~}
+apt-get install -y puppet-agent
+
+/opt/puppetlabs/bin/puppet config set server ${puppet.fqdn} --section main
+/opt/puppetlabs/bin/puppet config set certname ${vm.vm_name} --section main
+
+systemctl enable puppet
+systemctl start puppet
+
+/opt/puppetlabs/bin/puppet agent -t --waitforcert 60 || true
+%{ endif ~}

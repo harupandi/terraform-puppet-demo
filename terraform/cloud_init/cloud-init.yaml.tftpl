@@ -1,0 +1,15 @@
+#cloud-config
+hostname: ${vm.vm_name}
+fqdn: ${vm.vm_name}.internal
+
+manage_etc_hosts: true
+package_update: true
+
+write_files:
+  - path: /opt/bootstrap-puppet.sh
+    permissions: '0755'
+    content: |
+      ${indent(6, bootstrap_script)}
+
+runcmd:
+  - [ bash, -c, /opt/bootstrap-puppet.sh ]
