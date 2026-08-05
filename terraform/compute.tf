@@ -63,5 +63,25 @@ resource "azurerm_linux_virtual_machine" "vm" {
     type = "SystemAssigned"
   }
 
+  custom_data = base64encode(
+    templatefile(
+      "${path.module}/cloud_init/cloud-init.yaml.tftpl",
+      {
+        vm = each.value
+
+        bootstrap_script = templatefile(
+          "${path.module}/cloud_init/bootstrap-puppet.sh.tftpl",
+          {
+            vm = each.value
+
+            puppet = {
+              fqdn = var.puppet_server_fqdn
+            }
+          }
+        )
+      }
+    )
+  )
+
   tags = local.tags
 }

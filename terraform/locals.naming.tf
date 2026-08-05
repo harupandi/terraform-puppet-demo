@@ -1,5 +1,7 @@
 locals {
 
+  project = "nginx"
+
   prefix = "${local.project}-${var.environment}"
 
   resource_group_name = "${local.prefix}-rg"
@@ -37,17 +39,5 @@ locals {
   bastion_public_ip_name = "${local.prefix}-bastion-pip"
 
   nsg_name = "${local.prefix}-nsg"
-
-  vms = {
-    for vm_name, config in var.vms :
-
-    vm_name => merge(
-      config,
-      {
-        vm_name  = "${local.prefix}-${vm_name}"
-        nic_name = "${local.prefix}-${vm_name}-nic"
-      }
-    )
-  }
 
 }

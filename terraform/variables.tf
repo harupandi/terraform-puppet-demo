@@ -32,5 +32,11 @@ variable "vms" {
 
   type = map(object({
     zone = number
+    role = string
   }))
+}
+
+variable "puppet_server_fqdn" {
+  description = "FQDN of the Puppet Server"
+  type        = string
 }

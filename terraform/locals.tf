@@ -1,7 +1,5 @@
 locals {
 
-  project = "nginx"
-
   tags = {
     Project     = "Terraform-Puppet"
     Environment = var.environment
@@ -35,5 +33,17 @@ locals {
   probe_interval            = 30
   probe_timeout             = 30
   probe_unhealthy_threshold = 3
+
+  vms = {
+    for vm_name, config in var.vms :
+
+    vm_name => merge(
+      config,
+      {
+        vm_name  = "${local.prefix}-${vm_name}"
+        nic_name = "${local.prefix}-${vm_name}-nic"
+      }
+    )
+  }
 
 }

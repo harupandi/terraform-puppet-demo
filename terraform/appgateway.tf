@@ -41,8 +41,9 @@ resource "azurerm_application_gateway" "main" {
     name = local.appgw_backend_pool_name
 
     ip_addresses = [
-      for nic in azurerm_network_interface.vm :
+      for key, nic in azurerm_network_interface.vm :
       nic.private_ip_address
+      if local.vms[key].role == "app"
     ]
   }
 
