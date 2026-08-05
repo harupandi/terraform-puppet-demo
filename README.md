@@ -1,148 +1,108 @@
-# Azure Highly Available Nginx Platform (Terraform + Puppet)
+# Enterprise NGINX Platform on Azure
 
 ## Overview
 
-This project demonstrates the design and deployment of a highly available Nginx application platform on Microsoft Azure using Infrastructure as Code (IaC) and configuration management.
+This project demonstrates how to provision and configure a highly available web platform on Microsoft Azure using **Terraform** for Infrastructure-as-Code and **Puppet** for configuration management.
 
-The goal is to build a production-inspired Azure environment where:
+The environment provisions multiple Linux virtual machines across Availability Zones behind an Azure Application Gateway. After the infrastructure is deployed, Puppet automatically configures the application servers by installing Docker and deploying an NGINX container.
 
-- Infrastructure is provisioned using Terraform.
-- Virtual machines are distributed across Azure Availability Zones.
-- Secure administrative access is provided through Azure Bastion.
-- Application traffic is distributed using Azure Application Gateway.
-- VM configuration is automated using Puppet.
-- Nginx runs inside Docker containers on Linux virtual machines.
-
-The architecture follows Azure best practices around networking isolation, security, availability, and identity management.
+The project follows common enterprise practices including reusable Infrastructure-as-Code, configuration management, private networking, managed identities, and centralized ingress.
 
 ---
 
-# Architecture
+## Architecture
 
-## Target Architecture
-                     Internet
-                        |
-                        |
-                Azure Application Gateway
-                        |
-                        |
-          ---------------------------------
-          |              |                |
-        VM01            VM02             VM03
-      Zone 1          Zone 2           Zone 3
-          |              |                |
-          ---------------------------------
-                        |
-                Workload Subnet
+```
+                 Internet
+                      │
+                      ▼
+          Azure Application Gateway
+                      │
+          ┌───────────┼───────────┐
+          │           │           │
+       VM01        VM02       VM03
+      Zone 1      Zone 2      Zone 3
+          │           │           │
+          └───────────┼───────────┘
+                      │
+                Virtual Network
 
-                        ^
-                        |
-                Azure Bastion
-                        |
-                Administrator Access
+                      │
+                Puppet Server
 
----
-
-# Azure Resources
-
-The final solution will contain:
-
-## Networking
-
-- Resource Group
-- Virtual Network
-- Dedicated subnets:
-  - AzureBastionSubnet
-  - Application Gateway subnet
-  - Workload subnet
-- Network Security Group
-- NSG rules and subnet association
-
-## Compute
-
-- Three Linux Virtual Machines
-- Deployment across Availability Zones:
-  - VM01 → Zone 1
-  - VM02 → Zone 2
-  - VM03 → Zone 3
-
-VM specifications:
-
-- Ubuntu Linux
-- Standard_D2ds_v7 VM size
-- System Assigned Managed Identity
-- SSH key authentication
-- No public IP addresses
-
-## Security
-
-- Azure Bastion for secure VM access
-- No direct SSH exposure to the Internet
-- Network isolation using NSGs
-- Managed Identity enabled on virtual machines
-
-## Application Delivery
-
-Planned:
-
-- Azure Application Gateway
-- Public frontend endpoint
-- Backend pool containing the three Nginx VMs
-- HTTP listener
-- Health probes
-- Routing rules
-
-## Configuration Management
-
-Planned:
-
-- Puppet installation
-- Puppet agent configuration
-- Docker installation
-- Nginx container deployment
+                      │
+               Azure Bastion
+```
 
 ---
 
+## Technologies
 
-# Terraform Design Decisions
-
-## Resource Naming
-
-Resource names are generated using Terraform locals.
-
-Example:
-docker-nginx-dev-rg
-docker-nginx-dev-vnet
-docker-nginx-dev-vm01
-
-
-Naming is centralized in:
-locals.naming.tf
-
-
-This avoids hardcoding resource names throughout the Terraform code.
+| Technology | Purpose |
+|------------|---------|
+| Terraform | Provision Azure infrastructure |
+| Puppet | Configuration management |
+| Azure Application Gateway | Layer 7 load balancing and reverse proxy |
+| Azure Bastion | Secure administrative access |
+| Docker | Container runtime |
+| NGINX | Web server |
+| Ubuntu Server 24.04 LTS | Operating system |
+| Private DNS Zone | Internal name resolution |
+| Managed Identity | Azure authentication without secrets |
 
 ---
 
-## VM Deployment Pattern
+## Design Goals
 
-VMs are modeled using Terraform maps and `for_each`.
+### High Availability
 
-Example:
+- Multiple Availability Zones
+- Stateless application servers
+- Layer 7 traffic distribution
 
-```hcl
-vms = {
+### Infrastructure as Code
 
-  vm01 = {
-    zone = 1
-  }
+- Declarative infrastructure
+- Reusable Terraform modules
+- Version-controlled deployments
 
-  vm02 = {
-    zone = 2
-  }
+### Configuration Management
 
-  vm03 = {
-    zone = 3
-  }
+- Automated software installation
+- Consistent server configuration
+- Idempotent deployments
 
-}
+### Security
+
+- Private networking
+- Azure Bastion
+- Network Security Groups
+- Managed Identities
+
+### Scalability
+
+Application servers can be added by updating the Terraform VM map without changing the infrastructure code.
+
+---
+
+## Repository Structure
+
+```
+terraform/
+    Infrastructure provisioning
+
+puppet/
+    Configuration management
+
+README.md
+    Project overview
+```
+
+---
+
+## Documentation
+
+Detailed implementation guides are available in:
+
+- `terraform/README.md`
+- `puppet/README.md`
